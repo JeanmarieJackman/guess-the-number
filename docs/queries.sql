@@ -1,0 +1,1 @@
+SELECT * FROM guess_the_number.game_results;
