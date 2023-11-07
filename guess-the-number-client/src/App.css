@@ -1,0 +1,70 @@
+/* .app-container {
+  background-image: url('./assets/numbers.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(255, 255, 255, 0.5);
+  min-height: 100vh;
+  padding: 20px;
+} */
+/* .background-container {
+  opacity: 0.33;
+} */
+.background-container {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  /* opacity: 0.33; Add opacity to the background image */
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.game-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 12px; /* Add rounded edges */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add drop shadow */
+  opacity: 0.9;
+}
+
+
+.high-scores-container {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  z-index: 1000;
+  background-color: white;
+  border-radius: 12px; /* Add rounded edges */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add drop shadow */
+  opacity: 0.9;
+}
+
+
+.high-scores-table-container {
+  width: 90%;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+
+
+.table th {
+  font-weight: bold;
+}
