@@ -10,8 +10,9 @@ const HighScores = () => {
         const response = await fetch('http://localhost:8080/api/game');
         if (response.ok) {
           const data = await response.json();
-          console.log('Data from API:', data);
-          setHighScores(data);
+          const sortedScores = sortHighScores(data); // Sort the high scores
+          console.log('Data from API:', sortedScores);
+          setHighScores(sortedScores);
         } else {
           console.error('Failed to fetch high scores');
         }
@@ -22,6 +23,17 @@ const HighScores = () => {
 
     fetchHighScores();
   }, []);
+
+  // Function to sort high scores by attempts and date
+  const sortHighScores = (scores) => {
+    return scores.sort((a, b) => {
+      if (a.attempts === b.attempts) {
+        // If attempts are the same, sort by date (oldest first)
+        return new Date(a.gameDate) - new Date(b.gameDate);
+      }
+      return a.attempts - b.attempts; // Sort by attempts
+    });
+  };
 
   return (
     <div className="high-scores-container">

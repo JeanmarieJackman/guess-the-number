@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import '../App.css';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Game = () => {
   const [playerName, setPlayerName] = useState('');
@@ -10,6 +11,8 @@ const Game = () => {
   const [message, setMessage] = useState('');
   const [numberOfTries, setNumberOfTries] = useState(0);
   const [showHighScoresButton, setShowHighScoresButton] = useState(false);
+
+  const navigate = useNavigate(); // Use useNavigate for navigation
 
   function generateRandomNumber() {
     return Math.floor(Math.random() * 100) + 1;
@@ -78,6 +81,10 @@ const Game = () => {
     sendWinInfoToDatabase();
   }, [message, playerName, numberOfTries]);
 
+  const handleViewHighScores = () => {
+    navigate('/high-scores'); // Navigate to the High Scores page
+  };
+
   return (
     <div className="game-container">
       {!gameStarted ? (
@@ -100,7 +107,7 @@ const Game = () => {
                 {numberOfTries} tries.
               </p>
               <button onClick={() => setShowHighScoresButton(false)}>Play Again</button>
-              <button onClick={() => console.log('View High Scores')}>View High Scores</button>
+              <button onClick={handleViewHighScores}>View High Scores</button>
             </div>
           ) : (
             <div>
