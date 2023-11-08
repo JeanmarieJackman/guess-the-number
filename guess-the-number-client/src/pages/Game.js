@@ -11,8 +11,9 @@ const Game = () => {
   const [message, setMessage] = useState('');
   const [numberOfTries, setNumberOfTries] = useState(0);
   const [showHighScoresButton, setShowHighScoresButton] = useState(false);
-
-  const navigate = useNavigate(); // Use useNavigate for navigation
+  const [gameOver, setGameOver] = useState(false);
+  const maxGuesses = 10;
+  const navigate = useNavigate();
 
   function generateRandomNumber() {
     return Math.floor(Math.random() * 100) + 1;
@@ -31,6 +32,11 @@ const Game = () => {
   const handleGuess = (e) => {
     e.preventDefault();
 
+    if (!gameStarted) {
+      alert('Please start the game first.');
+      return;
+    }
+
     const guess = parseInt(userGuess, 10);
     setNumberOfTries(numberOfTries + 1);
 
@@ -41,48 +47,66 @@ const Game = () => {
     } else if (guess > randomNumber) {
       setMessage('Try a lower number.');
     } else {
-      setMessage(
-        `Congratulations, ${playerName}! The correct number was ${randomNumber}, and you guessed it in ${numberOfTries} tries.`
-      );
-      setShowHighScoresButton(true);
-    }
-
-    setUserGuess('');
-  };
-
-  useEffect(() => {
-    async function sendWinInfoToDatabase() {
-      try {
-        if (message && message.startsWith('Congratulations')) {
-          const response = await fetch('http://localhost:8080/api/game', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              playerName: playerName,
-              attempts: numberOfTries,
-              win: true,
-              gameDate: new Date().toISOString(),
-            }),
-          });
-
-          if (response.ok) {
-            console.log('Win information sent to the database successfully');
-          } else {
-            console.error('Failed to send win information to the database');
-          }
-        }
-      } catch (error) {
-        console.error('An error occurred while sending win information to the database:', error);
+      if (numberOfTries < maxGuesses) {
+        setMessage(
+          `Congratulations, ${playerName}! The correct number was ${randomNumber}, and you guessed it in ${numberOfTries} tries.`
+        );
+        setShowHighScoresButton(true);
+        setGameOver(true);
+        sendGameResultToDatabase(true, numberOfTries);
+      } else {
+        setMessage(`Sorry, ${playerName}! You've reached the maximum number of ${maxGuesses} tries.`);
+        setShowHighScoresButton(true);
+        setGameOver(true);
+        sendGameResultToDatabase(false, numberOfTries);
       }
     }
 
-    sendWinInfoToDatabase();
-  }, [message, playerName, numberOfTries]);
+    setUserGuess('');
+
+    if (numberOfTries >= maxGuesses) {
+      setMessage(`Sorry, ${playerName}! You've reached the maximum number of ${maxGuesses} tries.`);
+      setShowHighScoresButton(true);
+      setGameOver(true);
+      sendGameResultToDatabase(false, numberOfTries);
+    }
+  };
+
+  const sendGameResultToDatabase = async (win, attempts) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/game', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          playerName: playerName,
+          attempts: attempts,
+          win: win,
+          gameDate: new Date().toISOString(),
+        }),
+      });
+
+      if (response.ok) {
+        console.log('Game result sent to the database successfully');
+      } else {
+        console.error('Failed to send game result to the database');
+      }
+    } catch (error) {
+      console.error('An error occurred while sending game result to the database:', error);
+    }
+  };
 
   const handleViewHighScores = () => {
-    navigate('/high-scores'); // Navigate to the High Scores page
+    navigate('/high-scores');
+  };
+
+  const handlePlayAgain = () => {
+    setGameStarted(false);
+    setNumberOfTries(0);
+    setGameOver(false);
+    setRandomNumber(generateRandomNumber());
+    setShowHighScoresButton(false);
   };
 
   return (
@@ -102,12 +126,13 @@ const Game = () => {
         <div>
           {showHighScoresButton ? (
             <div>
-              <p>
-                Congratulations, {playerName}! The correct number was {randomNumber}, and you guessed it in{' '}
-                {numberOfTries} tries.
-              </p>
-              <button onClick={() => setShowHighScoresButton(false)}>Play Again</button>
-              <button onClick={handleViewHighScores}>View High Scores</button>
+              <p>{message}</p>
+              {gameOver ? (
+                <div>
+                  <button onClick={handlePlayAgain}>Play Again</button>
+                  <button onClick={handleViewHighScores}>View High Scores</button>
+                </div>
+              ) : null}
             </div>
           ) : (
             <div>
@@ -122,6 +147,7 @@ const Game = () => {
                 <button type="submit">Submit Guess</button>
               </form>
               {message && <p>{message}</p>}
+              <p>Guesses made: {numberOfTries} out of {maxGuesses}</p>
             </div>
           )}
         </div>
