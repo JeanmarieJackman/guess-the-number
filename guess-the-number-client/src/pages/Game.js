@@ -12,6 +12,7 @@ const Game = () => {
   const [numberOfTries, setNumberOfTries] = useState(0);
   const [showHighScoresButton, setShowHighScoresButton] = useState(false);
   const [gameOver, setGameOver] = useState(false);
+  const [guessedNumbers, setGuessedNumbers] = useState([]); // Track guessed numbers
   const maxGuesses = 10;
   const navigate = useNavigate();
 
@@ -38,15 +39,22 @@ const Game = () => {
     }
 
     const guess = parseInt(userGuess, 10);
-    setNumberOfTries(numberOfTries + 1);
 
-    if (isNaN(guess)) {
-      setMessage('Please enter a valid number.');
-    } else if (guess < randomNumber) {
-      setMessage('Try a higher number.');
-    } else if (guess > randomNumber) {
-      setMessage('Try a lower number.');
-    } else {
+    if (isNaN(guess) || guess <= 0 || guess >= 101) {
+      setMessage('Please enter a valid number between 1 and 100.');
+      return;
+    }
+
+    if (guessedNumbers.includes(guess)) {
+      setMessage('You already guessed that number. Try again.');
+      setUserGuess('');
+      return;
+    }
+
+    setNumberOfTries(numberOfTries + 1);
+    setGuessedNumbers([...guessedNumbers, guess]); // Add the guessed number
+
+    if (guess === randomNumber) {
       if (numberOfTries < maxGuesses) {
         setMessage(
           `Congratulations, ${playerName}! The correct number was ${randomNumber}, and you guessed it in ${numberOfTries} tries.`
@@ -60,16 +68,20 @@ const Game = () => {
         setGameOver(true);
         sendGameResultToDatabase(false, numberOfTries);
       }
+    } else {
+      setMessage(
+        `Try a ${guess < randomNumber ? 'higher' : 'lower'} number. ${maxGuesses - numberOfTries} attempts remaining.`
+      );
+
+      if (numberOfTries >= maxGuesses) {
+        setMessage(`Sorry, ${playerName}! You've reached the maximum number of ${maxGuesses} tries.`);
+        setShowHighScoresButton(true);
+        setGameOver(true);
+        sendGameResultToDatabase(false, numberOfTries);
+      }
     }
 
     setUserGuess('');
-
-    if (numberOfTries >= maxGuesses) {
-      setMessage(`Sorry, ${playerName}! You've reached the maximum number of ${maxGuesses} tries.`);
-      setShowHighScoresButton(true);
-      setGameOver(true);
-      sendGameResultToDatabase(false, numberOfTries);
-    }
   };
 
   const sendGameResultToDatabase = async (win, attempts) => {
@@ -107,30 +119,31 @@ const Game = () => {
     setGameOver(false);
     setRandomNumber(generateRandomNumber());
     setShowHighScoresButton(false);
+    setGuessedNumbers([]); // Reset guessed numbers
   };
 
   return (
-<div className="game-container">
-  {!gameStarted ? (
-    <form onSubmit={handleStartGame} className="text-center">
-      <h1 className="card-title display-1 text-success">GUESS THE NUMBER</h1>
-      <p>Choose a number between 1 and 100. If you guess in less than 10 attempts, you win!</p>
-      <div className="input-group">
-        <input
-          type="text"
-          placeholder="Enter your name"
-          value={playerName}
-          onChange={(e) => setPlayerName(e.target.value)}
-          className="form-control"
-        />
-        <div className="input-group-append">
-          <button type="submit" className="btn btn-primary">
-            Start Game
-          </button>
-        </div>
-      </div>
-    </form>
-  ) : (
+    <div className="game-container">
+      {!gameStarted ? (
+        <form onSubmit={handleStartGame} className="text-center">
+          <h1 className="card-title display-1 text-success">GUESS THE NUMBER</h1>
+          <p>Choose a number between 1 and 100. If you guess in less than 10 attempts, you win!</p>
+          <div className="input-group">
+            <input
+              type="text"
+              placeholder="Enter your name"
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              className="form-control"
+            />
+            <div className="input-group-append">
+              <button type="submit" className="btn btn-primary">
+                Start Game
+              </button>
+            </div>
+          </div>
+        </form>
+      ) : (
         <div>
           {showHighScoresButton ? (
             <div>
@@ -171,4 +184,3 @@ const Game = () => {
 };
 
 export default Game;
-
