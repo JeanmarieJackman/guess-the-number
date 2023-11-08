@@ -37,7 +37,7 @@ const HighScores = () => {
 
   return (
     <div className="high-scores-container">
-      <h1>High Scores</h1>
+    <h1 className="card-title display-1 text-success">High Scores</h1>
       <div className="high-scores-table-container">
         <table className="table">
           <thead>

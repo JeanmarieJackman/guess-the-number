@@ -110,33 +110,45 @@ const Game = () => {
   };
 
   return (
-    <div className="game-container">
-      {!gameStarted ? (
-        <form onSubmit={handleStartGame}>
-          <h1>Guess the Number</h1>
-          <input
-            type="text"
-            placeholder="Enter your name"
-            value={playerName}
-            onChange={(e) => setPlayerName(e.target.value)}
-          />
-          <button type="submit">Start Game</button>
-        </form>
-      ) : (
+<div className="game-container">
+  {!gameStarted ? (
+    <form onSubmit={handleStartGame} className="text-center">
+      <h1 className="card-title display-1 text-success">GUESS THE NUMBER</h1>
+      <p>Choose a number between 1 and 100. If you guess in less than 10 attempts, you win!</p>
+      <div className="input-group">
+        <input
+          type="text"
+          placeholder="Enter your name"
+          value={playerName}
+          onChange={(e) => setPlayerName(e.target.value)}
+          className="form-control"
+        />
+        <div className="input-group-append">
+          <button type="submit" className="btn btn-primary">
+            Start Game
+          </button>
+        </div>
+      </div>
+    </form>
+  ) : (
         <div>
           {showHighScoresButton ? (
             <div>
-              <p>{message}</p>
+              <p className="card-text">{message}</p>
               {gameOver ? (
                 <div>
-                  <button onClick={handlePlayAgain}>Play Again</button>
-                  <button onClick={handleViewHighScores}>View High Scores</button>
+                  <button onClick={handlePlayAgain} className="btn btn-primary">
+                    Play Again
+                  </button>
+                  <button onClick={handleViewHighScores} className="btn btn-primary">
+                    View High Scores
+                  </button>
                 </div>
               ) : null}
             </div>
           ) : (
             <div>
-              <p>Hello, {playerName}! The game is in progress.</p>
+              <p className="card-text">Hello, {playerName}! The game is in progress.</p>
               <form onSubmit={handleGuess}>
                 <input
                   type="number"
@@ -144,10 +156,12 @@ const Game = () => {
                   value={userGuess}
                   onChange={(e) => setUserGuess(e.target.value)}
                 />
-                <button type="submit">Submit Guess</button>
+                <button type="submit" className="btn btn-primary">
+                  Submit Guess
+                </button>
               </form>
-              {message && <p>{message}</p>}
-              <p>Guesses made: {numberOfTries} out of {maxGuesses}</p>
+              {message && <p className="card-text">{message}</p>}
+              <p className="card-text">Guesses made: {numberOfTries} out of {maxGuesses}</p>
             </div>
           )}
         </div>
@@ -157,3 +171,4 @@ const Game = () => {
 };
 
 export default Game;
+

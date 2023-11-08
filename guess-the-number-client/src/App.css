@@ -19,23 +19,64 @@
   padding: 20px;
 }
 
+
+.card-container {
+  width: 90%;
+  height: 0;
+  padding-bottom: 90%; /* Set the height to be 90% of the width to keep it square */
+  box-shadow: 0 24px 24px rgba(0, 0, 0, 0.8); /* Add drop shadow */
+  position: relative;
+}
+
+.card-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  text-align: center;
+}
+
+
+/* Updated CSS for centering and spacing */
 .game-container {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90%;
-  max-height: 100%;
+  width: 80%;
+  height: 80vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   z-index: 1000;
   background-color: white;
-  border-radius: 12px; /* Add rounded edges */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add drop shadow */
+  border-radius: 12px;
+  box-shadow: 0 24px 24px rgba(0, 0, 0, 0.8);
   opacity: 0.9;
 }
+
+/* Style for centering the text in the form */
+.text-center {
+  text-align: center;
+}
+
+/* Style for spacing between input and button in the form */
+.input-group {
+  margin-top: 10px; /* Add some margin to create space */
+}
+
+
+/* Updated CSS for centered text within card-content */
+.card-text {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 
 
 .high-scores-container {
@@ -52,7 +93,7 @@
   z-index: 1000;
   background-color: white;
   border-radius: 12px; /* Add rounded edges */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Add drop shadow */
+  box-shadow: 0 24px 24px rgba(0, 0, 0, 0.8); /* Add drop shadow */
   opacity: 0.9;
 }
 

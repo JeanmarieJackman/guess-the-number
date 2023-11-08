@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 
 function Navbar() {
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
       <div className="container">
         <Link to="/" className="navbar-brand">Guess The Number Game</Link>
         <ul className="navbar-nav">
