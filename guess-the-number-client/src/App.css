@@ -109,3 +109,14 @@
 .table th {
   font-weight: bold;
 }
+
+/* CSS for the links in the footer */
+.footer-link {
+  color: white; /* Initial color (white) */
+  transition: color 0.3s ease; /* Smooth transition for color change */
+}
+
+/* Hover state: Change color to paler without blue */
+.footer-link:hover {
+  color: lightgray; /* Change to a paler color on hover (e.g., light gray) */
+}

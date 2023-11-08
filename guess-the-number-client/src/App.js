@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import './App.css';
 import Navbar from './components/NavBar';
+import Footer from './components/Footer';
 import Home from './pages/Home';
 import Game from './pages/Game';
 import HighScores from './pages/HighScores';
@@ -25,6 +26,7 @@ function App() {
             </Routes>
           </div>
         </div>
+        <Footer />
       </div>
     </Router>
   );
